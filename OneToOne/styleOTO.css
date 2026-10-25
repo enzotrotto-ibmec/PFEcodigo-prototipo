@@ -108,15 +108,15 @@
 /* ---------- Hero ---------- */
 .hero-content h1 {
   font-weight: 800;
-  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  font-size: clamp(2.1rem, 9vw, 2.8rem);
   line-height: 1.15;
   color: var(--accent);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.875rem;
 }
 .hero-content p {
-  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+  font-size: 1.1rem;
   color: var(--text-muted);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 .hero-actions {
   display: flex;
@@ -149,8 +149,8 @@
 }
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(18.125rem, 100%), 1fr));
-  gap: 1.75rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
   margin-top: 2rem;
   max-width: var(--wrap);
   margin-left: auto;
@@ -178,7 +178,7 @@
   object-fit: cover;
 }
 .service-body {
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -224,28 +224,28 @@
   margin-bottom: 0.5rem;
 }
 
-/* ---------- Responsivo (marca) ---------- */
-@media (max-width: 48em) {
+/* ---------- Responsivo (marca), mobile first: o CSS acima é o celular ---------- */
+@media (min-width: 40.0625em) {
+  .hero-content h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    margin-bottom: 1.25rem;
+  }
+  .hero-content p {
+    font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+    margin-bottom: 2rem;
+  }
   .card-grid {
     grid-template-columns: repeat(auto-fit, minmax(min(16.25rem, 100%), 1fr));
+    gap: 1.75rem;
+  }
+  .service-body {
+    padding: 1.5rem;
   }
 }
 
-@media (max-width: 40em) {
-  .hero-content h1 {
-    font-size: clamp(2.1rem, 9vw, 2.8rem);
-    margin-bottom: 0.875rem;
-  }
-  .hero-content p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-  }
+@media (min-width: 48.0625em) {
   .card-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  .service-body {
-    padding: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(18.125rem, 100%), 1fr));
   }
 }
 

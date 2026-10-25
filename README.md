@@ -41,12 +41,12 @@ shared/               Código usado pelas duas marcas
     aula-experimental.js  agenda, validação e envio pelo WhatsApp
 
 fotos-originais/      Fotos em alta resolução (fontes). NÃO são usadas pelo site.
-tools/
-  otimizar-imagens.py Gera as variantes -480/-800/-1280 a partir de fotos-originais/
 ```
 
 Cada página de marca define `<html data-brand="pkz|oto">`; o JS compartilhado lê `data.js` com essa chave.
 Ordem dos CSS nas páginas de marca: `base.css` → CSS da marca → `cta.css` (só onde há CTA) → `extras.css`.
+
+**O CSS é mobile first**: o que está fora de `@media` é o layout de celular, e cada `@media (min-width: …)` só acrescenta o que muda em telas maiores (pontos de quebra em 641px, 769px, 861px e 1101px). O menu hambúrguer aparece até 768px; a partir de 769px os links ficam em linha no cabeçalho.
 
 ## Atenção
 
@@ -57,10 +57,4 @@ Ordem dos CSS nas páginas de marca: `base.css` → CSS da marca → `cta.css` (
 
 ## Imagens
 
-Para adicionar ou trocar uma foto, coloque o original em `fotos-originais/<landing|PKZ|OneToOne>/`, inclua o nome na lista `FONTES` de `tools/otimizar-imagens.py` e rode (precisa de Python + Pillow):
-
-```bash
-python tools/otimizar-imagens.py
-```
-
-Esse script é só uma ferramenta de desenvolvimento: o site em si não executa nada além de HTML, CSS e JavaScript.
+As fotos do site já estão em WebP nos tamanhos `-480`, `-800` e `-1280` (usados no `srcset` das páginas). Para trocar ou adicionar uma foto, exporte nesses três tamanhos e siga o mesmo padrão de `srcset` das imagens existentes.

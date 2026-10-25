@@ -106,19 +106,19 @@
 
 /* ---------- Hero ---------- */
 .hero-content h1 {
-  font-size: var(--fs-hero);
+  font-size: clamp(2rem, 11vw, 3rem);
   font-weight: 900;
   font-style: italic;
   line-height: 1.1;
   letter-spacing: -1px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.875rem;
   background: linear-gradient(180deg, #ffffff 30%, var(--accent-ink) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .hero-content h2 {
-  font-size: clamp(1.2rem, 3vw, 1.7rem);
+  font-size: 1.15rem;
   font-weight: 600;
   font-style: italic;
   color: var(--accent-ink);
@@ -134,18 +134,19 @@
 /* ---------- Equipe de apoio ---------- */
 .team-support-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 2.25rem;
   background-color: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1.75rem;
+  padding: 1.25rem;
   margin: 0 auto 3rem;
   text-align: left;
 }
 .team-support-img {
   flex: 0 0 45%;
-  max-width: 26.25rem;
+  max-width: 100%;
   border-radius: 10px;
   overflow: hidden;
   aspect-ratio: 16 / 10;
@@ -226,7 +227,7 @@
 /* ---------- Modalidades esportivas ---------- */
 .sport-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  grid-template-columns: 1fr;
   gap: 1.75rem;
   margin-bottom: 2.5rem;
 }
@@ -307,27 +308,27 @@ select.modal-input option {
   margin-bottom: 0.5rem;
 }
 
-/* ---------- Responsivo (marca) ---------- */
-@media (max-width: 53.75em) {
-  .team-support-card {
-    flex-direction: column;
-    padding: 1.25rem;
+/* ---------- Responsivo (marca), mobile first: o CSS acima é o celular ---------- */
+@media (min-width: 40.0625em) {
+  .hero-content h1 {
+    font-size: var(--fs-hero);
+    margin-bottom: 1.25rem;
   }
-  .team-support-img {
-    max-width: 100%;
+  .hero-content h2 {
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
+  }
+  .sport-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
   }
 }
 
-@media (max-width: 40em) {
-  .hero-content h1 {
-    font-size: clamp(2rem, 11vw, 3rem);
-    margin-bottom: 0.875rem;
+@media (min-width: 53.8125em) {
+  .team-support-card {
+    flex-direction: row;
+    padding: 1.75rem;
   }
-  .hero-content h2 {
-    font-size: 1.15rem;
-  }
-  .sport-grid {
-    grid-template-columns: 1fr;
+  .team-support-img {
+    max-width: 26.25rem;
   }
 }
 

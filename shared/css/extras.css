@@ -67,13 +67,16 @@
 .wa-fab {
   display: none;
 }
-@media (max-width: 68.75em) {
-  body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-top.show {
-    opacity: 0;
-    pointer-events: none;
-  }
+body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-top.show {
+  opacity: 0;
+  pointer-events: none;
 }
 @media (min-width: 68.8125em) {
+  /* desktop largo: o botão fica na gutter e nunca cobre o foco, então não precisa sumir */
+  body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
   .floating-actions {
     right: 0;
     bottom: 1.5rem;
