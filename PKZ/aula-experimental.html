@@ -20,9 +20,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:ital,wght@0,700;0,800;0,900;1,600;1,900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/base.css" />
+    <link rel="stylesheet" href="../shared/css/base.css" />
     <link rel="stylesheet" href="./stylePKZ.css" />
-    <link rel="stylesheet" href="../shared/extras.css" />
+    <link rel="stylesheet" href="../shared/css/extras.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Pular para o conteúdo</a>
@@ -114,6 +114,7 @@
         <div id="day-chips" class="day-chips" role="group" aria-label="Escolha o dia"></div>
         <h3 id="time-heading" class="time-heading" aria-live="polite"></h3>
         <ul id="time-list" class="time-list" aria-labelledby="time-heading"></ul>
+        <!-- Sem JavaScript o número não vem de data.js: manter igual a whatsapp em shared/js/data.js -->
         <noscript>
           <p class="schedule-intro">
             Ative o JavaScript ou fale conosco pelo
@@ -297,7 +298,7 @@
       </button>
     </aside>
 
-    <script src="../shared/data.js" defer></script>
-    <script src="./scriptAula.js" defer></script>
+    <script src="../shared/js/data.js" defer></script>
+    <script src="../shared/js/aula-experimental.js" defer></script>
   </body>
 </html>

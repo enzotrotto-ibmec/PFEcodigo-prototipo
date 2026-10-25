@@ -1,6 +1,6 @@
 /*
   Base compartilhada PKZ Lab + Studio One To One (estrutura, sem cor/fonte de marca).
-  Ordem de carga:  shared/base.css  ->  <marca>.css  ->  shared/cta.css (só nas páginas com CTA)
+  Ordem de carga:  shared/css/base.css  ->  <marca>.css  ->  shared/css/cta.css (só nas páginas com CTA)
 
   Contrato: cada CSS de marca define, em :root, os tokens abaixo (o base só usa var(--token)).
   Tokens de layout/movimento iguais nas duas marcas ficam aqui em :root e a marca só sobrescreve se precisar.
@@ -56,7 +56,7 @@
 }
 /* Base fluida: 16px até 1100px, crescendo linear até 28px em 2560px (tela grande = zoom proporcional;
    larguras de layout e espaçamentos estão em rem e acompanham). Em rem para respeitar a
-   preferência de fonte do usuário. Manter idêntica em shared/legal.css. */
+   preferência de fonte do usuário. Manter idêntica em shared/css/legal.css. */
 html {
   font-size: clamp(1rem, 0.435rem + 0.8222vw, 1.75rem);
 }
@@ -809,10 +809,6 @@ textarea.modal-input {
   font-size: var(--fs-sm);
   color: var(--text-footnote);
 }
-/* link de privacidade com style="font-size:0.78rem" inline nas páginas de aula */
-.footer-bottom a[style] {
-  font-size: var(--fs-sm) !important;
-}
 @media (max-width: 40em) {
   .footer-inner {
     flex-direction: column;
@@ -1332,38 +1328,4 @@ select:focus-visible {
   .modal-dialog[open]::backdrop {
     animation: none;
   }
-}
-
-/* ============================================================
-   legado — remover após migração para <dialog>
-   Overlay antigo (<div class="modal-overlay" role="dialog"> + .active via JS).
-   Nenhum HTML/JS usa mais; fica só como rede de segurança.
-   ============================================================ */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--overlay);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.25rem;
-  overflow-y: auto;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s,
-    visibility 0.3s;
-}
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-.modal-overlay .modal-box {
-  transform: translateY(24px) scale(0.96);
-  transition: transform 0.3s;
-}
-.modal-overlay.active .modal-box {
-  transform: translateY(0) scale(1);
 }

@@ -1,4 +1,4 @@
-// Dados da marca vêm de ../shared/data.js (fonte única); cada <html> define data-brand.
+// Dados da marca vêm de data.js (fonte única, na mesma pasta); cada <html> define data-brand.
 const BRAND = window.SITE_DATA.brands[document.documentElement.dataset.brand];
 const SCHEDULE = BRAND.schedule;
 

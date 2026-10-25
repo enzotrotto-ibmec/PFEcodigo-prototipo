@@ -1,4 +1,4 @@
-// Dados da marca vêm de ../shared/data.js (fonte única); cada <html> define data-brand.
+// Dados da marca vêm de data.js (fonte única, na mesma pasta); cada <html> define data-brand.
 const BRAND = window.SITE_DATA.brands[document.documentElement.dataset.brand];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -111,6 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
       window.open(url, "_blank", "noopener,noreferrer");
     });
   }
+
+  // O HTML não guarda o número: os links com data-whatsapp recebem o de data.js.
+  document.querySelectorAll("a[data-whatsapp]").forEach((link) => {
+    link.href = `https://wa.me/${BRAND.whatsapp}`;
+  });
 
   const backToTopBtn = document.getElementById("back-to-top");
   if (backToTopBtn) {

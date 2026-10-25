@@ -1,8 +1,9 @@
 """Gera variantes responsivas das fotos (WebP).
 
 Rodar (na raiz do projeto):  python tools/otimizar-imagens.py
-Convenção: para cada fonte X.webp, grava na mesma pasta X-480.webp, X-800.webp
-e X-1280.webp (largura em px, altura proporcional; sem ampliar a fonte).
+Convenção: o original fica em fotos-originais/<area>/X.webp (area = landing, PKZ ou OneToOne);
+as variantes X-480.webp, X-800.webp e X-1280.webp vão para <area>/Fotos/
+(largura em px, altura proporcional; sem ampliar a fonte).
 Idempotente: sobrescreve só as variantes, nunca o original.
 Se uma variante passar da meta de KB, baixa a qualidade de 5 em 5 até 60.
 """
@@ -11,16 +12,16 @@ import os
 from PIL import Image, ImageOps
 
 FONTES = [
-    "Fotos/LandingPKZ.webp",
-    "Fotos/LandingOneToOne.webp",
-    "PKZ/Fotos/EquipePKZ.webp",
-    "PKZ/Fotos/karate.webp",
-    "PKZ/Fotos/JiuJitsu.webp",
-    "PKZ/Fotos/volei.webp",
-    "OneToOne/Fotos/equipe.webp",
-    "OneToOne/Fotos/fisioterapia.webp",
-    "OneToOne/Fotos/nutricao.webp",
-    "OneToOne/Fotos/personal-training.webp",
+    "landing/LandingPKZ.webp",
+    "landing/LandingOneToOne.webp",
+    "PKZ/EquipePKZ.webp",
+    "PKZ/karate.webp",
+    "PKZ/JiuJitsu.webp",
+    "PKZ/volei.webp",
+    "OneToOne/equipe.webp",
+    "OneToOne/fisioterapia.webp",
+    "OneToOne/nutricao.webp",
+    "OneToOne/personal-training.webp",
 ]
 ALVOS = {480: 60, 800: 130, 1280: 250}  # largura -> meta em KB
 QUALIDADE, QUALIDADE_MIN = 72, 60
@@ -28,13 +29,16 @@ QUALIDADE, QUALIDADE_MIN = 72, 60
 raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 print(f"{'fonte':42} {'orig':>11} {'KB':>7}  variante -> dimensões, KB, qualidade")
 for fonte in FONTES:
-    caminho = os.path.join(raiz, fonte)
+    area, nome = fonte.split("/")
+    caminho = os.path.join(raiz, "fotos-originais", area, nome)
+    destino = os.path.join(raiz, area, "Fotos")
+    os.makedirs(destino, exist_ok=True)
     img = ImageOps.exif_transpose(Image.open(caminho))
     if img.mode not in ("RGB", "RGBA"):
         img = img.convert("RGB")
     kb_orig = os.path.getsize(caminho) / 1024
     print(f"{fonte:42} {img.width}x{img.height:<5} {kb_orig:7.0f}")
-    base = os.path.splitext(caminho)[0]
+    base = os.path.join(destino, os.path.splitext(nome)[0])
     for largura, meta in ALVOS.items():
         v = img.copy()
         if v.width > largura:

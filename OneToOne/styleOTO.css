@@ -1,6 +1,6 @@
 /*
   Studio One To One — tema claro (branco + azul petróleo + ciano), tipografia arredondada.
-  Carregar DEPOIS de ../shared/base.css (estrutura) e ANTES de ../shared/cta.css.
+  Carregar DEPOIS de ../shared/css/base.css (estrutura) e ANTES de ../shared/css/cta.css.
   Aqui: tokens da marca + só o que é específico da One To One (logotipo, hero, serviços).
 */
 
@@ -17,7 +17,7 @@
   /* ---------- Acento ---------- */
   --accent: #014c6f; /* azul petróleo: marca, botão primário, voltar ao topo */
   --accent-strong: var(--accent); /* preenchimento de ação primária (botões, chip ativo) */
-  --accent-light: #00bbff; /* ciano: hover/pressionado (shared/cta.css lê este nome) */
+  --accent-light: #00bbff; /* ciano: hover/pressionado (shared/css/cta.css lê este nome) */
   --accent-ink: var(--accent); /* cor de texto/ícone/borda de destaque */
   --on-accent: #ffffff; /* texto sobre --accent */
 

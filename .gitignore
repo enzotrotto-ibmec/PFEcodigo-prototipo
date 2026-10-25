@@ -1,0 +1,10 @@
+# Python (tools/otimizar-imagens.py)
+__pycache__/
+*.pyc
+
+# Sistema operacional / editor
+Thumbs.db
+.DS_Store
+desktop.ini
+.vscode/
+.idea/

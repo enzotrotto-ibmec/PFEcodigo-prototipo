@@ -20,10 +20,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:ital,wght@0,700;0,800;0,900;1,600;1,900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/base.css" />
+    <link rel="stylesheet" href="../shared/css/base.css" />
     <link rel="stylesheet" href="./stylePKZ.css" />
-    <link rel="stylesheet" href="../shared/cta.css" />
-    <link rel="stylesheet" href="../shared/extras.css" />
+    <link rel="stylesheet" href="../shared/css/cta.css" />
+    <link rel="stylesheet" href="../shared/css/extras.css" />
     <!-- JSON-LD: adicionar quando existirem — telephone, openingHours, url (domínio), image, priceRange. -->
     <script type="application/ld+json">
     {
@@ -84,7 +84,7 @@
         </div>
 
         <div class="nav-center">
-          <a href="#" class="brand-logo-link" aria-label="PKZ Lab — página inicial">
+          <a href="#home" class="brand-logo-link" aria-label="PKZ Lab — página inicial">
             <span class="brand-text desktop-logo">PKZ LAB</span>
             <span class="brand-text mobile-logo">PKZ LAB</span>
           </a>
@@ -423,7 +423,7 @@
         <div class="cta-band-actions">
           <a href="aula-experimental.html" class="btn cta-btn cta-btn-primary">Agendar aula</a>
           <a
-            href="https://wa.me/5521000000000"
+            data-whatsapp
             class="btn cta-btn cta-btn-secondary"
             target="_blank"
             rel="noopener noreferrer"
@@ -569,11 +569,11 @@
       </div>
     </dialog>
 
-    <!-- Número placeholder: manter igual a whatsapp em shared/data.js -->
+    <!-- O href dos links com data-whatsapp é preenchido por shared/js/pagina-marca.js com o número de shared/js/data.js -->
     <nav class="mobile-cta" aria-label="Ações rápidas">
       <a href="aula-experimental.html" class="btn cta-btn cta-btn-primary">Agendar aula</a>
       <a
-        href="https://wa.me/5521000000000"
+        data-whatsapp
         class="btn cta-btn cta-btn-secondary"
         target="_blank"
         rel="noopener noreferrer"
@@ -605,12 +605,12 @@
           <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
       </button>
-      <a class="wa-fab" href="https://wa.me/5521000000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp: falar com a equipe (abre em nova aba)">
+      <a class="wa-fab" data-whatsapp target="_blank" rel="noopener noreferrer" aria-label="WhatsApp: falar com a equipe (abre em nova aba)">
         <svg aria-hidden="true" focusable="false"><use href="#icon-whatsapp"></use></svg>
       </a>
     </aside>
 
-    <script src="../shared/data.js" defer></script>
-    <script src="./scriptPKZ.js" defer></script>
+    <script src="../shared/js/data.js" defer></script>
+    <script src="../shared/js/pagina-marca.js" defer></script>
   </body>
 </html>

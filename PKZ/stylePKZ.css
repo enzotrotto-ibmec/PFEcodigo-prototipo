@@ -1,6 +1,6 @@
 /*
   PKZ Lab — tema escuro azul-marinho, tipografia esportiva itálica.
-  Carregar DEPOIS de ../shared/base.css (estrutura) e ANTES de ../shared/cta.css.
+  Carregar DEPOIS de ../shared/css/base.css (estrutura) e ANTES de ../shared/css/cta.css.
   Aqui: tokens da marca + só o que é específico da PKZ (logotipo, hero, esportes, confiança familiar).
 */
 
@@ -17,7 +17,7 @@
   /* ---------- Acento ---------- */
   --accent: #002d6b; /* azul âncora: voltar ao topo, hover de chip/horário */
   --accent-strong: #004099; /* preenchimento de ação primária (botões, chip ativo) */
-  --accent-hover: var(--accent-strong); /* alias: shared/cta.css lê este nome */
+  --accent-hover: var(--accent-strong); /* alias: shared/css/cta.css lê este nome */
   --accent-ink: #93c5fd; /* azul claro: texto/ícone/borda de destaque sobre fundo escuro */
   --on-accent: #ffffff; /* texto sobre --accent / --accent-strong */
 

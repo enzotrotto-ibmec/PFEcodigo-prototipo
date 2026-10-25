@@ -7,13 +7,16 @@
     <title>Página não encontrada | PKZ Lab e Studio One To One</title>
     <meta name="description" content="A página que você procurou não existe ou mudou de lugar." />
     <meta name="theme-color" content="#0e1116" />
-    <!-- Caminhos relativos à raiz: funcionam em hospedagem estática na raiz do domínio.
-         Se o site ficar em subpasta, adicione <base href="/subpasta/"> aqui, antes dos links. -->
+    <!-- O 404 é servido na URL que deu erro (ex.: /PKZ/xyz), então caminhos relativos quebram.
+         O <base> abaixo faz o ícone, o CSS e os links partirem sempre da raiz do site publicado.
+         GitHub Pages (site de projeto): "/nome-do-repositorio/". TROQUE se o repositório tiver outro nome.
+         Domínio próprio, Netlify ou Vercel: "/".
+         Com <base>, links só de âncora (#algo) navegam para a raiz: não use nesta página. -->
+    <base href="/PFEcodigo-prototipo/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="shared/legal.css" />
+    <link rel="stylesheet" href="shared/css/legal.css" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Pular para o conteúdo</a>
     <main id="main" class="legal-main not-found" tabindex="-1">
       <h1>Página não encontrada</h1>
       <p>O endereço pode estar errado ou a página mudou de lugar. Escolha uma das unidades para continuar.</p>
