@@ -1,6 +1,6 @@
 /*
   Base compartilhada PKZ Lab + Studio One To One (estrutura, sem cor/fonte de marca).
-  Ordem de carga:  shared/css/base.css  ->  <marca>.css  ->  shared/css/cta.css (só nas páginas com CTA)
+  Ordem de carga:  base.css  ->  <marca>.css (pkz.css ou one-to-one.css)  ->  cta.css (só nas páginas com CTA)
 
   Contrato: cada CSS de marca define, em :root, os tokens abaixo (o base só usa var(--token)).
   Tokens de layout/movimento iguais nas duas marcas ficam aqui em :root e a marca só sobrescreve se precisar.
@@ -58,7 +58,7 @@
 }
 /* Base fluida: 16px até 1100px, crescendo linear até 28px em 2560px (tela grande = zoom proporcional;
    larguras de layout e espaçamentos estão em rem e acompanham). Em rem para respeitar a
-   preferência de fonte do usuário. Manter idêntica em shared/css/legal.css. */
+   preferência de fonte do usuário. Manter idêntica em legal.css. */
 html {
   font-size: clamp(1rem, 0.435rem + 0.8222vw, 1.75rem);
 }

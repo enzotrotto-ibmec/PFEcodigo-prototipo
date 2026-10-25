@@ -375,7 +375,7 @@ body {
       rgba(2, 11, 24, 0) 100%
     ),
     linear-gradient(rgba(2, 11, 24, 0.62), rgba(2, 11, 24, 0.62)),
-    url("Fotos/LandingPKZ-800.webp");
+    url("../assets/img/portal/LandingPKZ-800.webp");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -395,7 +395,7 @@ body {
       rgba(255, 255, 255, 0) 100%
     ),
     linear-gradient(rgba(214, 245, 255, 0.66), rgba(255, 255, 255, 0.64)),
-    url("Fotos/LandingOneToOne-800.webp");
+    url("../assets/img/portal/LandingOneToOne-800.webp");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -414,7 +414,7 @@ body {
         rgba(2, 11, 24, 0) 100%
       ),
       linear-gradient(rgba(2, 11, 24, 0.62), rgba(2, 11, 24, 0.62)),
-      url("Fotos/LandingPKZ-1280.webp");
+      url("../assets/img/portal/LandingPKZ-1280.webp");
   }
   #oto {
     background-image:
@@ -424,7 +424,7 @@ body {
         rgba(255, 255, 255, 0) 100%
       ),
       linear-gradient(rgba(214, 245, 255, 0.66), rgba(255, 255, 255, 0.64)),
-      url("Fotos/LandingOneToOne-1280.webp");
+      url("../assets/img/portal/LandingOneToOne-1280.webp");
   }
 }
 

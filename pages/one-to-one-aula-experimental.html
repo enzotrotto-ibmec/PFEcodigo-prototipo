@@ -12,7 +12,7 @@
     <meta property="og:description" content="Agende sua aula experimental no Studio One To One, personal training na Barra da Tijuca, Rio de Janeiro. Escolha o melhor dia e horário." />
     <meta property="og:locale" content="pt_BR" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml" />
     <title>Aula Experimental | Studio One To One</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,9 +20,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/css/base.css" />
-    <link rel="stylesheet" href="./styleOTO.css" />
-    <link rel="stylesheet" href="../shared/css/extras.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/one-to-one.css" />
+    <link rel="stylesheet" href="../css/extras.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Pular para o conteúdo</a>
@@ -52,14 +52,14 @@
             <span class="back-text">Portal</span>
           </a>
           <a
-            href="../PKZ/indexPKZ.html"
+            href="pkz.html"
             class="cross-brand-nav-link"
             >PKZ Lab →</a
           >
         </div>
 
         <div class="nav-center">
-          <a href="./indexOTO.html" class="brand-logo-link" aria-label="Studio One To One — página inicial">
+          <a href="one-to-one.html" class="brand-logo-link" aria-label="Studio One To One — página inicial">
             <span class="brand-text desktop-logo">STUDIO ONE TO ONE</span>
             <span class="brand-text mobile-logo">ONE TO ONE</span>
           </a>
@@ -78,8 +78,8 @@
             <span class="hamburger-bar"></span>
           </button>
           <ul id="primary-navigation" class="nav-links">
-            <li><a href="indexOTO.html#sobre" class="nav-link">Sobre</a></li>
-            <li><a href="indexOTO.html#location" class="nav-link">Localização</a></li>
+            <li><a href="one-to-one.html#sobre" class="nav-link">Sobre</a></li>
+            <li><a href="one-to-one.html#location" class="nav-link">Localização</a></li>
             <li>
               <a
                 href="#contact"
@@ -114,7 +114,7 @@
         <div id="day-chips" class="day-chips" role="group" aria-label="Escolha o dia"></div>
         <h3 id="time-heading" class="time-heading" aria-live="polite"></h3>
         <ul id="time-list" class="time-list" aria-labelledby="time-heading"></ul>
-        <!-- Sem JavaScript o número não vem de data.js: manter igual a whatsapp em shared/js/data.js -->
+        <!-- Sem JavaScript o número não vem de data.js: manter igual a whatsapp em js/data.js -->
         <noscript>
           <p class="schedule-intro">
             Ative o JavaScript ou fale conosco pelo
@@ -193,7 +193,7 @@
 
           <label class="booking-consent">
             <input type="checkbox" id="booking-consent" required />
-            <span>Autorizo o uso dos meus dados, inclusive o CPF, apenas para o agendamento e o controle interno da One To One. Veja a <a href="../privacidade.html" target="_blank" rel="noopener noreferrer" aria-label="Política de Privacidade (abre em nova aba)" class="text-link">Política de Privacidade</a>.</span>
+            <span>Autorizo o uso dos meus dados, inclusive o CPF, apenas para o agendamento e o controle interno da One To One. Veja a <a href="privacidade.html" target="_blank" rel="noopener noreferrer" aria-label="Política de Privacidade (abre em nova aba)" class="text-link">Política de Privacidade</a>.</span>
           </label>
 
           <p id="booking-error" class="booking-error" role="alert" hidden></p>
@@ -273,7 +273,7 @@
 
       <div class="footer-bottom">
         <span>&copy; 2026 Studio One To One. Todos os direitos reservados.</span>
-        <a class="footer-legal" href="../privacidade.html">Política de Privacidade</a>
+        <a class="footer-legal" href="privacidade.html">Política de Privacidade</a>
       </div>
     </footer>
 
@@ -295,7 +295,7 @@
       </button>
     </aside>
 
-    <script src="../shared/js/data.js" defer></script>
-    <script src="../shared/js/aula-experimental.js" defer></script>
+    <script src="../js/data.js" defer></script>
+    <script src="../js/agendamento.js" defer></script>
   </body>
 </html>

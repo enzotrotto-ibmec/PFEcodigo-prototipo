@@ -30,7 +30,7 @@
       pkz: {
         name: "PKZ Lab",
         // Placeholder (DDI + DDD + número, só dígitos). Troque o número real AQUI.
-        // Os links com data-whatsapp nos HTML recebem este número via pagina-marca.js. Só o <noscript> de aula-experimental.html tem o número escrito à mão.
+        // Os links com data-whatsapp nos HTML recebem este número via main.js. Só o <noscript> das páginas *-aula-experimental.html tem o número escrito à mão.
         whatsapp: "5521000000000",
         contactFallbackName: "Atleta",
         contactMessage: (userName) =>
@@ -43,7 +43,7 @@
       oto: {
         name: "One To One",
         // Placeholder (DDI + DDD + número, só dígitos). Troque o número real AQUI.
-        // Os links com data-whatsapp nos HTML recebem este número via pagina-marca.js. Só o <noscript> de aula-experimental.html tem o número escrito à mão.
+        // Os links com data-whatsapp nos HTML recebem este número via main.js. Só o <noscript> das páginas *-aula-experimental.html tem o número escrito à mão.
         whatsapp: "5521000000000",
         contactFallbackName: "um visitante",
         contactMessage: (userName) =>

@@ -1,5 +1,5 @@
-const PKZ_URL = "PKZ/indexPKZ.html";
-const OTO_URL = "OneToOne/indexOTO.html";
+const PKZ_URL = "pages/pkz.html";
+const OTO_URL = "pages/one-to-one.html";
 const EDGE = 10; // soltar com p <= 10 (PKZ) ou p >= 90 (One To One) redireciona
 
 const handle = document.getElementById("handle");
