@@ -104,7 +104,7 @@ O site é publicado via GitHub Pages.
 ## Observações técnicas
 
 * **Mobile first:** o que está fora de `@media` nos arquivos CSS é o layout de celular; cada `@media (min-width: …)` só acrescenta o que muda em telas maiores (pontos de quebra em 641px, 769px, 861px e 1101px). O menu hambúrguer aparece até 768px; a partir de 769px os links ficam em linha no cabeçalho.
-* **Menu hambúrguer:** `js/main.js` (e `js/agendamento.js`, nas páginas de agendamento) adiciona e remove a classe `nav-open` na lista de links para abrir e fechar o menu.
+* **Menu hambúrguer:** `js/main.js` adiciona e remove a classe `nav-open` na lista de links; o CSS mostra e esconde o painel (as páginas de agendamento também carregam o `main.js`).
 * **WhatsApp:** o número `5521000000000` é um valor de exemplo. Troque-o em `js/data.js` (uma vez por marca): os links `wa.me` das páginas levam o atributo `data-whatsapp` e recebem o número de lá. A única cópia escrita à mão fica no `<noscript>` de cada página `*-aula-experimental.html` (sem JavaScript não há como ler o `data.js`).
 * **404:** `404.html` usa `<base href="/PFEcodigo-prototipo/">`, o nome do repositório no GitHub Pages (que publica em `usuario.github.io/repositorio/`). Se o repositório tiver outro nome, troque essa linha; senão o 404 aparece sem estilo e com links quebrados. Nessa página não use links só de âncora (`#algo`).
 * **Imagens:** as fotos do site estão em WebP nos tamanhos `-480`, `-800` e `-1280` (usados no `srcset`). Para trocar ou adicionar uma foto, exporte nesses três tamanhos e siga o mesmo padrão das imagens existentes.

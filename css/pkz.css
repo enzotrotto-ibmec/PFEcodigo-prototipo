@@ -73,7 +73,6 @@
   --nav-hover-decoration: none;
   --nav-transition: color 0.2s ease;
   --logo-size-mobile: clamp(1.4rem, 7vw, 1.75rem); /* logotipo curto no header mobile */
-  --ease-hamburger: var(--ease-out); /* animação do ícone do menu */
 
   /* ---------- Sombras ---------- */
   --shadow-hero: 0 16px 36px rgba(0, 0, 0, 0.4); /* foto do hero */
@@ -83,7 +82,6 @@
 
   /* ---------- Overlays ---------- */
   --overlay: rgba(2, 11, 24, 0.85); /* ::backdrop do modal <dialog> */
-  --overlay-menu: rgba(0, 0, 0, 0.6); /* fundo atrás do menu mobile */
 }
 
 /* ---------- Logotipo (tipográfico, gradiente) ---------- */
@@ -378,22 +376,5 @@ select.modal-input option {
 @media (min-width: 81.25em) {
   .trust-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* Alto contraste: texto em gradiente (background-clip) some; usa a cor do sistema */
-@media (forced-colors: active) {
-  .brand-text,
-  .footer-logo,
-  .hero-content h1 {
-    background: none;
-    -webkit-text-fill-color: CanvasText;
-    color: CanvasText;
-    filter: none;
-  }
-  .trust-card,
-  .sport-card,
-  .team-support-card {
-    border: 1px solid CanvasText;
   }
 }

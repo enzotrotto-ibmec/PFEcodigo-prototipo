@@ -75,7 +75,6 @@
     color 0.2s,
     background-color 0.2s;
   --logo-size-mobile: clamp(1.3rem, 6vw, 1.6rem); /* logotipo curto no header mobile */
-  --ease-hamburger: ease; /* animação do ícone do menu */
 
   /* ---------- Sombras ---------- */
   --shadow-hero: 0 16px 36px rgba(1, 76, 111, 0.1); /* foto do hero */
@@ -85,7 +84,6 @@
 
   /* ---------- Overlays ---------- */
   --overlay: rgba(1, 76, 111, 0.45); /* ::backdrop do modal <dialog> */
-  --overlay-menu: rgba(1, 76, 111, 0.3); /* fundo atrás do menu mobile */
 }
 
 /* ---------- Logotipo (tipográfico, cor sólida) ---------- */
@@ -273,12 +271,5 @@
   }
   .service-body {
     padding: 1.75rem;
-  }
-}
-
-@media (forced-colors: active) {
-  .service-card,
-  .map-wrapper {
-    border: 1px solid CanvasText;
   }
 }

@@ -220,11 +220,9 @@ body {
 #handle:active {
   cursor: grabbing;
 }
-/* empurrão de descoberta: some no primeiro uso (.used) e com reduced-motion */
-@media (prefers-reduced-motion: no-preference) {
-  #handle:not(.used) {
-    animation: nudge 1.4s ease-in-out 0.6s 1;
-  }
+/* empurrão de descoberta: some no primeiro uso (.used) */
+#handle:not(.used) {
+  animation: nudge 1.4s ease-in-out 0.6s 1;
 }
 @keyframes nudge {
   0%,
@@ -857,69 +855,16 @@ body {
   color: var(--text-subtle);
 }
 
-/* Alto contraste do sistema: o que é só fundo (trilho, preenchimentos, painéis sobre foto) ganha forma/borda */
-@media (forced-colors: active) {
-  #track {
-    background: Canvas;
-    border: 1px solid CanvasText;
-  }
-  #fill-l,
-  #fill-r {
-    background: Highlight;
-    opacity: 1;
-  }
-  #div-line {
-    background: CanvasText;
-    box-shadow: none;
-  }
-  .p-inner {
-    background: Canvas;
-    border: 1px solid CanvasText;
-    border-radius: 12px;
-  }
-  .tag,
-  .intro-tag,
-  .cta-button,
-  .social-card,
-  #redir-cancel {
-    border: 2px solid ButtonText;
-  }
-  #handle:focus-visible,
-  .cta-button:focus-visible,
-  .bar-label:focus-visible,
-  .social-card:focus-visible,
-  #redir-cancel:focus-visible {
-    outline: 3px solid Highlight;
-  }
-  #redir {
-    background: Canvas !important;
-    color: CanvasText !important;
-  }
-}
-@media (prefers-contrast: more) {
-  :root {
-    --text-muted: #ffffff;
-    --text-subtle: #e2e8f0;
-  }
-  .tag,
-  .intro-tag,
-  .social-card {
-    border-width: 2px;
-    border-color: currentColor;
-  }
-}
-
+/* Quem prefere menos movimento (configuração do sistema): sem animações nem rolagem suave */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .arrow-hint.on {
-    animation: none;
-  }
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
 

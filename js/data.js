@@ -55,4 +55,8 @@
       },
     },
   };
+
+  // Dados da marca desta página (o <html> de cada página define data-brand="pkz" ou "oto").
+  // Os outros scripts usam BRAND direto.
+  window.BRAND = window.SITE_DATA.brands[document.documentElement.dataset.brand];
 })();

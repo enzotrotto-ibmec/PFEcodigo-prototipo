@@ -1,131 +1,61 @@
-// Dados da marca vêm de data.js (fonte única, na mesma pasta); cada <html> define data-brand.
-const BRAND = window.SITE_DATA.brands[document.documentElement.dataset.brand];
+// Comportamentos comuns das páginas das marcas (PKZ e One To One):
+// menu hambúrguer, janela de contato, links de WhatsApp e botão de voltar ao topo.
+// BRAND (os dados da marca desta página) vem de data.js.
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Configuração refinada do IntersectionObserver para renderização baseada na rolagem
-  const observerOptions = {
-    root: null,
-    rootMargin: "0px 0px -60px 0px",
-    threshold: 0.1,
-  };
+  // ---------- Menu hambúrguer ----------
+  // Abrir e fechar = adicionar e remover a classe "nav-open"; o CSS faz o resto.
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("primary-navigation");
 
-  const observer = new IntersectionObserver((entries, observerInstance) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observerInstance.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  document
-    .querySelectorAll(".animate-on-scroll")
-    .forEach((el) => observer.observe(el));
-
-  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
-  const primaryNav = document.getElementById("primary-navigation");
-  const menuOverlay = document.getElementById("mobile-menu-overlay");
-
-  // Com o menu aberto, só o header (botão + links) recebe foco: o resto da página fica inerte.
-  const setPageInert = (on) =>
-    document
-      .querySelectorAll("body > *:not(header):not(#mobile-menu-overlay):not(script)")
-      .forEach((el) => (el.inert = on));
-
-  function toggleMobileMenu() {
-    if (!mobileMenuBtn || !primaryNav) return;
-    const isExpanded = mobileMenuBtn.getAttribute("aria-expanded") === "true";
-    setPageInert(!isExpanded);
-    mobileMenuBtn.classList.toggle("active");
-    primaryNav.classList.toggle("nav-open");
-    mobileMenuBtn.setAttribute("aria-expanded", !isExpanded);
-    if (menuOverlay) menuOverlay.classList.toggle("active");
-    document.body.classList.toggle("no-scroll");
+  function fecharMenu() {
+    menu.classList.remove("nav-open");
+    menuBtn.classList.remove("active");
+    menuBtn.setAttribute("aria-expanded", "false");
   }
 
-  function closeMobileMenu(returnFocus = false) {
-    if (!mobileMenuBtn || !primaryNav) return;
-    const wasOpen = mobileMenuBtn.getAttribute("aria-expanded") === "true";
-    setPageInert(false);
-    mobileMenuBtn.classList.remove("active");
-    primaryNav.classList.remove("nav-open");
-    mobileMenuBtn.setAttribute("aria-expanded", "false");
-    if (menuOverlay) menuOverlay.classList.remove("active");
-    document.body.classList.remove("no-scroll");
-    if (returnFocus && wasOpen) mobileMenuBtn.focus(); // Esc devolve o foco ao botão do menu
-  }
+  menuBtn.addEventListener("click", () => {
+    const aberto = menu.classList.toggle("nav-open"); // true se acabou de abrir
+    menuBtn.classList.toggle("active", aberto); // o ícone vira "X"
+    menuBtn.setAttribute("aria-expanded", aberto);
+  });
 
-  if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", toggleMobileMenu);
-  if (menuOverlay) menuOverlay.addEventListener("click", () => closeMobileMenu());
+  // fecha ao clicar em um link do menu ou ao apertar Esc
+  menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", fecharMenu));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMobileMenu(true);
+    if (e.key === "Escape") fecharMenu();
   });
 
-  // Devolve o foco ao gatilho do diálogo; se ele está dentro do menu recolhido (mobile), vai ao botão do menu.
-  const focusTrigger = (el) => {
-    const visible = el && el.getClientRects().length && getComputedStyle(el).visibility !== "hidden";
-    (visible ? el : mobileMenuBtn)?.focus();
-  };
+  // ---------- Janela de contato (<dialog>) ----------
+  const contato = document.getElementById("contact");
+  const nomeInput = document.getElementById("name");
 
-  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => closeMobileMenu());
+  document.getElementById("open-contact-modal").addEventListener("click", (e) => {
+    e.preventDefault(); // não deixa o link pular para #contact
+    contato.showModal();
+  });
+  document.getElementById("close-modal").addEventListener("click", () => contato.close());
+  contato.addEventListener("click", (e) => {
+    if (e.target === contato) contato.close(); // clique no fundo escuro
   });
 
-  const modal = document.getElementById("contact");
-  const openModalBtn = document.getElementById("open-contact-modal");
-  const closeModalBtn = document.getElementById("close-modal");
-  const nameInput = document.getElementById("name");
-  const wppBtn = document.getElementById("whatsapp-cta");
+  // botão "Enviar para WhatsApp": abre o WhatsApp com a mensagem pronta
+  document.getElementById("whatsapp-cta").addEventListener("click", () => {
+    const nome = nomeInput.value.trim() || BRAND.contactFallbackName;
+    const url = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.contactMessage(nome))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  });
 
-  // <dialog> nativo: ESC, trava de foco e retorno do foco ao gatilho são do navegador.
-  function openModal(e) {
-    if (e) e.preventDefault();
-    if (!modal) return;
-    if (typeof modal.showModal === "function") modal.showModal();
-    else modal.setAttribute("open", "");
-    document.body.classList.add("no-scroll");
-  }
-
-  if (openModalBtn) openModalBtn.addEventListener("click", openModal);
-  if (modal) {
-    const closeModal = () => {
-      if (typeof modal.close === "function") return modal.close();
-      modal.removeAttribute("open"); // fallback sem <dialog>: dispara o "close" na mão
-      modal.dispatchEvent(new Event("close"));
-    };
-    if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
-    });
-    modal.addEventListener("close", () => {
-      document.body.classList.remove("no-scroll");
-      focusTrigger(openModalBtn); // Safari não foca <button> ao clicar; garante o retorno ao gatilho
-    });
-  }
-
-  if (wppBtn) {
-    wppBtn.addEventListener("click", () => {
-      const userName = nameInput?.value?.trim() || BRAND.contactFallbackName;
-      const url = `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(BRAND.contactMessage(userName))}`;
-      window.open(url, "_blank", "noopener,noreferrer");
-    });
-  }
-
+  // ---------- Links de WhatsApp ----------
   // O HTML não guarda o número: os links com data-whatsapp recebem o de data.js.
   document.querySelectorAll("a[data-whatsapp]").forEach((link) => {
     link.href = `https://wa.me/${BRAND.whatsapp}`;
   });
 
-  const backToTopBtn = document.getElementById("back-to-top");
-  if (backToTopBtn) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) backToTopBtn.classList.add("show");
-      else backToTopBtn.classList.remove("show");
-    }, { passive: true });
-    backToTopBtn.addEventListener("click", () => {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-    });
-  }
+  // ---------- Botão de voltar ao topo ----------
+  const topo = document.getElementById("back-to-top");
+  window.addEventListener("scroll", () => {
+    topo.classList.toggle("show", window.scrollY > 300); // aparece depois de 300px de rolagem
+  });
+  topo.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 });

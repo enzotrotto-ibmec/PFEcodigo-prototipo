@@ -1,6 +1,10 @@
+// Portal: o halter arrastável escolhe entre a PKZ (ponta esquerda) e a One To One (ponta direita).
+// Soltar perto de uma ponta mostra o aviso "redirecionando..." e abre a página da marca.
+
 const PKZ_URL = "pages/pkz.html";
 const OTO_URL = "pages/one-to-one.html";
-const EDGE = 10; // soltar com p <= 10 (PKZ) ou p >= 90 (One To One) redireciona
+const EDGE = 10; // soltar com posição <= 10 (PKZ) ou >= 90 (One To One) redireciona
+const REDIRECT_MS = 1500; // tempo do aviso antes de abrir a página (dá tempo de cancelar)
 
 const handle = document.getElementById("handle");
 const track = document.getElementById("track");
@@ -15,20 +19,19 @@ const arrR = document.getElementById("arr-r");
 const redir = document.getElementById("redir");
 const rName = document.getElementById("redir-name");
 const redirCancel = document.getElementById("redir-cancel");
-
 const dragHint = document.getElementById("drag-hint");
-
 const hintPkzBox = document.getElementById("hint-pkz-box");
-
 const btnPkzCta = document.getElementById("btn-pkz-cta");
 const btnOtoCta = document.getElementById("btn-oto-cta");
+const stageEl = document.getElementById("stage");
 
 let dragging = false;
 let redirected = false;
 let hasDragged = false;
 let redirTimer = null;
-let pos = 50;
+let pos = 50; // posição do halter, de 0 (ponta da PKZ) a 100 (ponta da One To One)
 
+// converte a posição do mouse/dedo em porcentagem (0 a 100) ao longo do trilho
 function toPercent(clientX) {
   const r = track.getBoundingClientRect();
   return Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
@@ -39,77 +42,61 @@ function fadeInner(el, width) {
   const o = Math.max(0, Math.min(1, (width - 22) / 16));
   el.style.opacity = o;
   el.style.visibility = o === 0 ? "hidden" : "visible";
-  el.inert = o === 0;
 }
 
+// texto lido por leitores de tela
+function textoDaPosicao(p) {
+  if (p <= EDGE) return "PKZ. Pressione Enter para visitar";
+  if (p >= 100 - EDGE) return "One To One. Pressione Enter para visitar";
+  if (p < 45) return "Mais perto da PKZ";
+  if (p > 55) return "Mais perto da One To One";
+  return "Centro";
+}
+
+// coloca o halter na posição p e ajusta painéis, linha do meio e setas
 function apply(p) {
   pos = p;
   handle.style.left = p + "%";
   handle.setAttribute("aria-valuenow", Math.round(p));
-  handle.setAttribute(
-    "aria-valuetext",
-    p <= EDGE
-      ? "PKZ. Pressione Enter para visitar"
-      : p >= 100 - EDGE
-        ? "One To One. Pressione Enter para visitar"
-        : p < 45
-          ? "Mais perto da PKZ"
-          : p > 55
-            ? "Mais perto da One To One"
-            : "Centro",
-  );
+  handle.setAttribute("aria-valuetext", textoDaPosicao(p));
 
   const pkzWidth = 100 - p;
-
   pkzPanel.style.width = pkzWidth + "%";
   divLine.style.left = `calc(${pkzWidth}% - 1px)`;
   fillL.style.width = pkzWidth + "%";
   fillR.style.width = p + "%";
   fadeInner(pkzInner, pkzWidth);
   fadeInner(otoInner, p);
+  hintPkzBox.style.width = pkzWidth + "%";
 
-  if (hintPkzBox) {
-    hintPkzBox.style.width = pkzWidth + "%";
-  }
-
-  // sinal de "solte para entrar"
+  // setas de "solte para entrar" nas pontas
   arrL.classList.toggle("on", p <= EDGE);
   arrR.classList.toggle("on", p >= 100 - EDGE);
 }
 
-// Só redireciona ao soltar (ou Enter/Espaço) perto de uma borda
-function commit(ms) {
-  if (pos <= EDGE) doRedirect("PKZ", "#07111e", "#ffffff", PKZ_URL, ms);
-  else if (pos >= 100 - EDGE)
-    doRedirect("ONE TO ONE", "#014c6f", "#ffffff", OTO_URL, ms);
+// Só redireciona ao soltar (ou Enter/Espaço) perto de uma ponta
+function commit() {
+  if (pos <= EDGE) doRedirect("PKZ", "#07111e", PKZ_URL);
+  else if (pos >= 100 - EDGE) doRedirect("ONE TO ONE", "#014c6f", OTO_URL);
 }
 
-// Quem usa teclado/leitor de tela ganha mais tempo para ouvir o aviso e cancelar (900ms para ponteiro).
-const REDIRECT_MS = 900;
-const REDIRECT_MS_KEYBOARD = 3000;
-// Enquanto o aviso está aberto o resto da página fica inerte (foco preso no botão Cancelar).
-const behind = () => document.querySelectorAll("#bar, main, #site-footer");
-
-function doRedirect(name, bg, color, url, ms = REDIRECT_MS) {
+function doRedirect(name, bg, url) {
   if (redirected) return;
   redirected = true;
-  behind().forEach((el) => (el.inert = true));
   redir.style.background = bg;
-  redir.style.color = color;
+  redir.style.color = "#ffffff";
   rName.textContent = name;
   redir.hidden = false;
-  void redir.offsetWidth;
   redir.classList.add("on");
   redirCancel.focus();
   redirTimer = setTimeout(() => {
     window.location.href = url;
-  }, ms);
+  }, REDIRECT_MS);
 }
 
 function cancelRedirect() {
   clearTimeout(redirTimer);
   redirected = false;
-  behind().forEach((el) => (el.inert = false));
   redir.classList.remove("on");
   redir.hidden = true;
   apply(50);
@@ -124,31 +111,23 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && redirected) redirCancel.click();
 });
 
-if (btnPkzCta) {
-  btnPkzCta.addEventListener("click", (e) => {
-    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+// Os botões "Quero conhecer" também mostram o aviso antes de abrir a página
+function ligarBotao(botao, name, bg, url) {
+  botao.addEventListener("click", (e) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return; // deixa abrir em nova aba
     e.preventDefault();
-    // e.detail === 0: ativado por teclado (Enter) ou tecnologia assistiva
-    doRedirect("PKZ", "#07111e", "#ffffff", PKZ_URL, e.detail === 0 ? REDIRECT_MS_KEYBOARD : REDIRECT_MS);
+    doRedirect(name, bg, url);
   });
 }
-
-if (btnOtoCta) {
-  btnOtoCta.addEventListener("click", (e) => {
-    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
-    e.preventDefault();
-    doRedirect("ONE TO ONE", "#014c6f", "#ffffff", OTO_URL, e.detail === 0 ? REDIRECT_MS_KEYBOARD : REDIRECT_MS);
-  });
-}
+ligarBotao(btnPkzCta, "PKZ", "#07111e", PKZ_URL);
+ligarBotao(btnOtoCta, "ONE TO ONE", "#014c6f", OTO_URL);
 
 // A barra fica fixa no topo e os painéis abaixo da apresentação: ao mexer no halter,
 // leva a página até os painéis para o arrasto nunca acontecer "às cegas".
-const stageEl = document.getElementById("stage");
 function showStage() {
   const r = stageEl.getBoundingClientRect();
   if (r.top < innerHeight * 0.25 && r.bottom > innerHeight * 0.75) return; // já está à vista
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  stageEl.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  stageEl.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // Primeiro uso: some a dica de texto e para o "empurrão" do halter
@@ -160,19 +139,7 @@ function firstUse() {
   handle.classList.add("used");
 }
 
-// Aplica no máximo uma vez por frame (evita reflow a cada evento de ponteiro)
-let pendingP = null;
-function scheduleApply(p) {
-  if (pendingP === null) {
-    requestAnimationFrame(() => {
-      if (pendingP !== null) apply(pendingP);
-      pendingP = null;
-    });
-  }
-  pendingP = p;
-}
-
-// Pointer Events cobrem mouse, touch e caneta; touch-action: none no CSS evita o scroll
+// Pointer Events cobrem mouse, toque e caneta; touch-action: none no CSS evita rolar a página
 handle.addEventListener("pointerdown", (e) => {
   if (e.button !== 0) return;
   dragging = true;
@@ -183,17 +150,12 @@ handle.addEventListener("pointerdown", (e) => {
 
 handle.addEventListener("pointermove", (e) => {
   if (!dragging) return;
-  scheduleApply(toPercent(e.clientX));
+  apply(toPercent(e.clientX));
 });
 
 handle.addEventListener("pointerup", () => {
   if (!dragging) return;
   dragging = false;
-  // aplica a posição pendente antes de decidir o redirecionamento
-  if (pendingP !== null) {
-    apply(pendingP);
-    pendingP = null;
-  }
   commit();
 });
 
@@ -203,7 +165,7 @@ handle.addEventListener("pointercancel", () => {
 
 apply(50);
 
-// Teclado: setas/Home/End só movem; Enter/Espaço entram se estiver numa borda
+// Teclado: setas/Home/End só movem; Enter/Espaço entram se estiver numa ponta
 handle.addEventListener("keydown", (e) => {
   const step = 5;
   let newPos = pos;
@@ -218,7 +180,7 @@ handle.addEventListener("keydown", (e) => {
     newPos = 100;
   } else if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
-    commit(REDIRECT_MS_KEYBOARD);
+    commit();
     return;
   } else {
     return;
@@ -231,7 +193,7 @@ handle.addEventListener("keydown", (e) => {
   }
 });
 
-// Ao voltar pelo histórico (bfcache), limpa o overlay e recentraliza o halter
+// Ao voltar pelo histórico (bfcache), limpa o aviso e recentraliza o halter
 window.addEventListener("pageshow", (e) => {
   if (e.persisted) cancelRedirect();
 });

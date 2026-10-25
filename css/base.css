@@ -16,9 +16,9 @@
     Botão       --btn-padding --btn-border --btn-hover-bg --btn-hover-fg --radius-btn --radius-btn-modal
     Tipografia  --font-display --font-body --heading-weight --heading-tracking
                 --nav-weight --nav-size --nav-hover --nav-hover-decoration --nav-transition
-                --logo-size-mobile --ease-hamburger
+                --logo-size-mobile
     Sombra      --shadow-hero --shadow-nav --fab-shadow --fab-offset
-    Overlay     --overlay (modal <dialog>) --overlay-menu (menu mobile)
+    Overlay     --overlay (fundo escuro atrás do modal <dialog>)
 */
 
 /* MOBILE FIRST: o CSS fora de @media é o layout de celular; cada @media (min-width) só acrescenta o que muda em telas maiores.
@@ -32,9 +32,6 @@
 :root {
   /* altura do header sticky: compensa as âncoras (scroll-padding-top); 5.25rem a partir de 769px */
   --header-h: 4rem;
-  /* curva "expo out" usada no painel do menu e na revelação ao rolar */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-menu: cubic-bezier(0.32, 0.72, 0, 1); /* curva de "folha" do iOS: arranca suave e assenta devagar */
 
   /* Escala tipográfica (rem: acompanha o html font-size fluido abaixo).
      Piso: nenhum texto visível < 14px (--fs-xs). Texto corrido >= --fs-base. */
@@ -46,12 +43,6 @@
   --fs-h2: clamp(1.8rem, 3.5vw, 2.3rem);
   --fs-hero: clamp(2.4rem, 8vw, 5.2rem);
 
-  /* Escala modular (razão 1,25 sobre 1rem) usada a partir de 1101px; abaixo disso valem os tokens acima. */
-  --step-0: 1rem;
-  --step-1: 1.25rem; /* parágrafo de abertura, título de card, nav secundário */
-  --step-2: 1.5625rem; /* logotipo */
-  --step-3: 1.953rem; /* h2 de seção */
-  --step-5: 3.052rem; /* h1 do hero */
   /* largura do container (navbar, hero, seções, rodapé): 67,5rem até 1100px; >= 1101px ver bloco "Desktop largo" */
   --wrap: 67.5rem;
   --gap-col: 3rem;
@@ -95,14 +86,6 @@ body {
   overflow-wrap: anywhere; /* fonte grande/zoom 400%: palavra longa quebra em vez de vazar do card */
 }
 
-body.no-scroll {
-  overflow: hidden;
-}
-/* html tem overflow-x: hidden, então o body sozinho não trava a rolagem */
-html:has(body.no-scroll) {
-  overflow: hidden;
-}
-
 section {
   padding: 3.75rem 1.125rem;
   max-width: 62.5rem;
@@ -127,9 +110,7 @@ h3 {
   background-color: var(--bg-header);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: max(0.5rem, env(safe-area-inset-top))
-    max(1rem, env(safe-area-inset-right)) 0.5rem
-    max(1rem, env(safe-area-inset-left));
+  padding: 0.5rem 1rem;
   position: sticky;
   top: 0;
   z-index: 200;
@@ -187,72 +168,33 @@ h3 {
   font-size: var(--logo-size-mobile);
 }
 
-/* Celular: o menu é um painel abaixo do header (60px), recolhido fora da tela e fora da ordem de tab.
-   A partir de 769px ele vira a linha de links do header (ver "Responsivo" mais abaixo). */
+/* Celular: o menu fica escondido e aparece como um painel logo abaixo do cabeçalho.
+   O JavaScript adiciona e remove a classe "nav-open" para abrir e fechar.
+   A partir de 769px ele vira a linha de links do cabeçalho (ver "Responsivo" mais abaixo). */
 .nav-links {
-  display: flex;
-  list-style: none;
-  position: fixed;
-  top: 3.75rem;
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
   left: 0;
   right: 0;
-  width: 100%;
-  background-color: var(--bg-nav-panel);
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
   padding: 1rem 1.5rem 2rem;
+  list-style: none;
+  background-color: var(--bg-nav-panel);
   border-bottom: 1px solid var(--border);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-radius: 0 0 16px 16px;
   box-shadow: var(--shadow-nav);
-  /* fechado: recolhido para cima. A sombra fica fora do recorte (insets negativos). */
-  transform: translateY(-1.25rem);
-  opacity: 0;
-  clip-path: inset(0 -2rem 100% -2rem);
-  pointer-events: none;
-  visibility: hidden;
-  /* usada ao FECHAR: rápida */
-  transition:
-    transform 0.3s var(--ease-menu),
-    clip-path 0.3s var(--ease-menu),
-    opacity 0.2s ease,
-    visibility 0s linear 0.3s;
-  z-index: 160;
 }
 .nav-links.nav-open {
-  transform: translateY(0);
-  opacity: 1;
-  clip-path: inset(0 -2rem -3rem -2rem);
-  pointer-events: auto;
-  visibility: visible;
-  /* usada ao ABRIR: mais longa e suave */
-  transition:
-    transform 0.6s var(--ease-menu),
-    clip-path 0.6s var(--ease-menu),
-    opacity 0.35s ease,
-    visibility 0s;
+  display: flex;
+  animation: menu-in 0.25s ease;
 }
-/* itens entram um a um (cascata); ao fechar somem juntos e rápido */
-.nav-links li {
-  opacity: 0;
-  transform: translateY(0.75rem);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
 }
-.nav-links.nav-open li {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.4s ease calc(0.12s + var(--i, 0) * 0.06s),
-    transform 0.5s var(--ease-menu) calc(0.12s + var(--i, 0) * 0.06s);
-}
-.nav-links li:nth-child(2) { --i: 1; }
-.nav-links li:nth-child(3) { --i: 2; }
-.nav-links li:nth-child(4) { --i: 3; }
-.nav-links li:nth-child(5) { --i: 4; }
-.nav-links li:nth-child(6) { --i: 5; }
 
 .nav-link,
 .back-link {
@@ -341,8 +283,8 @@ h3 {
   background-color: var(--text-primary);
   border-radius: 2px;
   transition:
-    transform 0.45s var(--ease-menu),
-    opacity 0.25s ease;
+    transform 0.3s ease,
+    opacity 0.2s ease;
 }
 .menu-toggle.active .hamburger-bar:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
@@ -352,26 +294,6 @@ h3 {
 }
 .menu-toggle.active .hamburger-bar:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
-}
-
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--overlay-menu);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0s linear 0.3s; /* fechar: some o fade e só depois esconde */
-  z-index: 150;
-}
-.menu-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  transition:
-    opacity 0.5s ease,
-    visibility 0s;
 }
 
 /* ============================================================
@@ -563,22 +485,14 @@ h3 {
   background-color: var(--overlay, rgba(0, 0, 0, 0.6));
   backdrop-filter: blur(10px);
 }
-/* entrada: só existe quando o dialog abre (reduced-motion desliga no bloco final) */
+/* animação de entrada: só acontece quando o dialog abre */
 .modal-dialog[open] .modal-box {
   animation: modal-in 0.3s ease;
-}
-.modal-dialog[open]::backdrop {
-  animation: modal-fade 0.3s ease;
 }
 @keyframes modal-in {
   from {
     opacity: 0;
     transform: translateY(24px) scale(0.96);
-  }
-}
-@keyframes modal-fade {
-  from {
-    opacity: 0;
   }
 }
 
@@ -706,28 +620,19 @@ textarea.modal-input {
   max-width: 40rem;
   margin: 0 auto 2rem;
 }
-/* Celular: faixa rolável (um dia ao lado do outro) com fade nas pontas, que indica que rola */
+/* Celular: os dias ficam numa faixa que rola para o lado */
 .day-chips {
   position: relative;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  scrollbar-width: none; /* esconde a barra de rolagem da faixa */
   gap: 0.5rem;
   margin-inline: -1.125rem;
   margin-bottom: 1.75rem;
   padding: 0.5rem 1.25rem;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
-  mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
-}
-.day-chips::-webkit-scrollbar {
-  display: none;
 }
 .day-chip {
   flex: 0 0 auto;
-  scroll-snap-align: center;
   min-height: 2.75rem;
   min-width: 3.5rem;
   padding: 0 1.125rem;
@@ -769,17 +674,6 @@ textarea.modal-input {
   gap: 0.625rem;
   max-width: 40rem;
   margin: 0 auto;
-}
-.time-list.is-fresh {
-  animation: slots-in 0.15s ease-out;
-}
-@keyframes slots-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 .time-slot {
   width: 100%;
@@ -908,7 +802,7 @@ textarea.modal-input {
 }
 
 /* ============================================================
-   Voltar ao topo e revelação ao rolar
+   Voltar ao topo
    ============================================================ */
 .back-to-top {
   position: fixed;
@@ -937,18 +831,6 @@ textarea.modal-input {
   transform: translateY(0);
 }
 
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(35px);
-  transition:
-    opacity 0.8s var(--ease-out),
-    transform 0.8s var(--ease-out);
-}
-.animate-on-scroll.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ============================================================
    Responsivo (mobile first): tudo acima é o layout de celular.
    Os blocos abaixo, em ordem crescente de largura, só acrescentam o que muda:
@@ -968,21 +850,16 @@ textarea.modal-input {
   .cross-brand-nav-link {
     display: inline-flex;
   }
-  /* chips de dia: voltam a quebrar linha, sem faixa rolável */
+  /* dias: voltam a quebrar linha, sem faixa rolável */
   .day-chips {
     flex-wrap: wrap;
     justify-content: center;
     overflow-x: visible;
-    scroll-snap-type: none;
-    scrollbar-width: auto;
     margin-inline: 0;
     padding: 0;
-    -webkit-mask-image: none;
-    mask-image: none;
   }
   .day-chip {
     flex: 0 1 auto;
-    scroll-snap-align: none;
   }
   .cross-brand-card {
     flex-direction: row;
@@ -996,18 +873,16 @@ textarea.modal-input {
   }
 }
 
-/* Tablet e desktop: sem hambúrguer, links do menu em linha dentro do header */
+/* Tablet e desktop: sem hambúrguer, links do menu em linha dentro do cabeçalho */
 @media (min-width: 48.0625em) {
   .site-header {
-    padding: max(0.75rem, env(safe-area-inset-top))
-      max(1.5rem, env(safe-area-inset-right)) 0.75rem
-      max(1.5rem, env(safe-area-inset-left));
+    padding: 0.75rem 1.5rem;
   }
   .back-link {
     padding: 0;
     margin-left: 0;
     min-width: auto;
-    justify-content: normal;
+    justify-content: flex-start;
   }
   .back-text {
     display: inline;
@@ -1021,36 +896,18 @@ textarea.modal-input {
   .menu-toggle {
     display: none;
   }
-  /* o painel vira a linha de links; .nav-open (menu aberto no celular e depois alargado) não tem efeito aqui */
-  .nav-links,
-  .nav-links.nav-open {
-    position: static;
-    top: auto;
-    left: auto;
-    right: auto;
-    width: auto;
-    background-color: transparent;
+  /* o painel vira a linha de links */
+  .nav-links {
+    display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.875rem;
+    position: static;
     padding: 0;
-    border-bottom: initial;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    background-color: transparent;
+    border-bottom: 0;
+    border-radius: 0;
     box-shadow: none;
-    transform: none;
-    opacity: 1;
-    clip-path: none;
-    pointer-events: auto;
-    visibility: visible;
-    transition: initial;
-    z-index: auto;
-  }
-  .nav-links li,
-  .nav-links.nav-open li {
-    opacity: 1;
-    transform: none;
-    transition: initial;
   }
   .nav-link {
     display: inline-flex;
@@ -1101,11 +958,11 @@ textarea.modal-input {
   :root {
     --wrap: min(92%, 120rem); /* fluido: 92% da largura, teto de 120rem só para telas ultralargas */
     --gap-col: clamp(2rem, 4.5%, 6rem); /* respiro entre colunas */
-    --fs-lg: var(--step-1);
-    --fs-xl: var(--step-1);
-    --fs-h2: var(--step-3);
-    --fs-hero: var(--step-5);
-    --fs-logo: var(--step-2);
+    --fs-lg: 1.25rem;
+    --fs-xl: 1.25rem;
+    --fs-h2: 1.953rem;
+    --fs-hero: 3.052rem;
+    --fs-logo: 1.5625rem;
   }
 
   /* Todas as faixas de conteúdo usam a mesma largura (e as mesmas bordas) que a navbar */
@@ -1150,7 +1007,7 @@ textarea.modal-input {
     white-space: nowrap;
   }
   .footer-logo {
-    font-size: var(--step-1);
+    font-size: 1.25rem;
   }
   .services-subtitle {
     max-width: 62ch;
@@ -1285,112 +1142,15 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
-/* Alto contraste: bordas e foco com cores do sistema (o outline nunca fica transparente) */
-@media (forced-colors: active) {
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible,
-  summary:focus-visible {
-    outline: 3px solid Highlight;
-  }
-  .btn,
-  .day-chip,
-  .time-slot,
-  .nav-link-highlight,
-  .highlight-item,
-  .section-tag,
-  .modal-badge,
-  .back-to-top,
-  .menu-toggle,
-  .modal-close,
-  .footer-social,
-  .cross-brand-card,
-  .modal-box {
-    border: 1px solid ButtonText;
-  }
-  .site-header,
-  .site-footer-page {
-    border-color: CanvasText;
-  }
-  .hamburger-bar {
-    background-color: ButtonText;
-  }
-  .day-chip[aria-pressed="true"] {
-    border-color: Highlight;
-    outline: 2px solid Highlight;
-  }
-}
-@media (prefers-contrast: more) {
-  :root {
-    --border: currentColor;
-    --border-strong: currentColor;
-    --border-slot: currentColor;
-    --border-input: currentColor;
-  }
-  .modal-input,
-  .day-chip,
-  .time-slot,
-  .highlight-item,
-  .faq-item {
-    border-width: 2px;
-  }
-  .nav-link,
-  .back-link,
-  .footer-legal,
-  .text-link {
-    text-decoration: underline;
-  }
-}
-
+/* Quem prefere menos movimento (configuração do sistema): sem animações nem rolagem suave */
 @media (prefers-reduced-motion: reduce) {
-  /* Menu: reduzir movimento != cortar a resposta visual. Só aparece/some com um fade curto. */
-  .nav-links,
-  .nav-links.nav-open {
-    transform: none !important;
-    clip-path: none !important;
-    transition-duration: 0.25s, 0.25s, 0.25s, 0s !important;
-  }
-  .nav-links {
-    transition-delay: 0s, 0s, 0s, 0.25s !important; /* fechar: só esconde depois do fade */
-  }
-  .nav-links.nav-open {
-    transition-delay: 0s !important;
-  }
-  .nav-links li,
-  .nav-links.nav-open li {
-    transform: none !important;
-    transition: none !important;
-    opacity: 1 !important;
-  }
-  .menu-overlay,
-  .menu-overlay.active {
-    transition-duration: 0.25s, 0s !important;
-  }
   html {
     scroll-behavior: auto;
   }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .animate-on-scroll {
-    opacity: 1;
-    transform: none;
-  }
-  .time-list.is-fresh {
-    animation: none;
-  }
-  .time-slot:active {
-    transform: none;
-  }
-  /* ::backdrop não é alcançado por "*" */
-  .modal-dialog[open] .modal-box,
-  .modal-dialog[open]::backdrop {
-    animation: none;
+    animation: none !important;
+    transition: none !important;
   }
 }

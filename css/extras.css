@@ -43,8 +43,7 @@
 /* ---------- Atalhos flutuantes (voltar ao topo + WhatsApp) ----------
    >= 1101px: encostados na borda direita, DENTRO da gutter lateral que o container
    (--wrap: 92%) deixa livre (4% de cada lado): nunca cobrem texto nem links.
-   <= 1100px: o WhatsApp vive na barra .mobile-cta; o voltar ao topo flutua no canto e
-   some enquanto o foco de teclado está em outro controle (nunca esconde o foco). */
+   <= 1100px: o WhatsApp vive na barra .mobile-cta; o voltar ao topo flutua no canto. */
 .floating-actions {
   position: fixed;
   right: 0.75rem;
@@ -67,16 +66,7 @@
 .wa-fab {
   display: none;
 }
-body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-top.show {
-  opacity: 0;
-  pointer-events: none;
-}
 @media (min-width: 68.8125em) {
-  /* desktop largo: o botão fica na gutter e nunca cobre o foco, então não precisa sumir */
-  body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-top.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
   .floating-actions {
     right: 0;
     bottom: 1.5rem;
@@ -112,9 +102,6 @@ body:has(:focus-visible):not(:has(.floating-actions :focus-visible)) .back-to-to
     width: 1.5rem;
     height: 1.5rem;
     fill: currentColor;
-  }
-  body.no-scroll .wa-fab {
-    display: none;
   }
 }
 [data-brand="pkz"] .wa-fab {
@@ -184,18 +171,6 @@ section.faq {
   text-decoration: underline;
   padding-block: 0.15em; /* área de toque >= 24px mesmo em linha */
 }
-@media (prefers-reduced-motion: reduce) {
-  .faq-item summary::after {
-    transition: none;
-  }
-  .faq-item[open] summary::after {
-    transform: rotate(45deg); /* sem rotação: troca o sentido por forma */
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 2px solid var(--accent-ink);
-    border-top: 2px solid var(--accent-ink);
-  }
-}
 
 /* >= 1101px: título à esquerda, perguntas à direita, na largura do container */
 @media (min-width: 68.8125em) {
@@ -211,11 +186,6 @@ section.faq {
   }
   section.faq .faq-list {
     margin-top: 0;
-  }
-}
-@media (forced-colors: active) {
-  .faq-item {
-    border: 1px solid CanvasText;
   }
 }
 
